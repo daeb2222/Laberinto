@@ -50,6 +50,122 @@ class Grafo {
         this.vertices = new Hashtable<>();
     }
 
+    public Vertice buscarVertice(String nombre_vertice) {
+        if (this.vertices.get(nombre_vertice) != null) {
+            return this.vertices.get(nombre_vertice);
+        }
+        return null;
+    }
+
+    public void agregarVecinosQ(Queue<Vertice> q, Vertice vertice) {
+        vertice.arcos.forEach((String, Arco)->{
+            Vertice vecino = buscarVertice(Arco.nombre_destino);
+            if(vecino.visto == false){
+                q.add(vecino);
+            }
+        });
+    }
+
+    public void agregarVecinos(Stack<Vertice> s, Vertice vertice) {
+        vertice.arcos.forEach((String, Arco)->{
+            Vertice vecino = buscarVertice(Arco.nombre_destino);
+            if (vecino.visto == false) {
+                s.push(vecino);
+            }
+        });
+    }
+
+    public void limpiarVisto() {
+        vertices.forEach((String, Vertice) -> {
+            Vertice.visto = false;
+        });
+    }
+
+    public Queue<String> DepthFirstSearch(String inicio, String destino) {
+        limpiarVisto(); //Ponemos en false los campos "visto" de vertices
+        Queue<String> ruta = new LinkedList<>();
+        boolean ENCONTRADO = false;
+        Stack<Vertice> pila = new Stack<>();
+        Vertice v = buscarVertice(inicio);
+        pila.push(v);
+        do {
+            v = pila.pop();
+            if (v.nombre.equals(destino)) {
+                ENCONTRADO = true;
+            } else {
+                v.visto = true;
+                agregarVecinos(pila, v);
+            }
+            ruta.add(v.nombre);
+
+        } while (pila.isEmpty() == false && ENCONTRADO == false);
+        System.out.println("DEPTH FIRST SEARCH");
+        if (ENCONTRADO == true) {
+            System.out.println("Existe un camino entre " + inicio + " y " + destino);
+            for (String vertice:ruta) {
+                System.out.print("("+vertice + ") " );
+                System.out.println();
+            }
+        } else {
+            System.out.println("NO HAY un camino entre " + inicio + " y " + destino);
+        }
+        return ruta;
+    }
+
+    public Queue<String> BreadthFirstSearch(String inicio, String destino) {
+        limpiarVisto(); //Ponemos en false los campos "visto" de vertices
+        Queue<String> ruta = new LinkedList<>();
+        boolean ENCONTRADO = false;
+        Queue<Vertice> cola = new LinkedList<>();
+        Vertice v = buscarVertice(inicio);
+        cola.add(v);
+        do {
+            v = cola.remove();
+            if (v.nombre.equals(destino)) {
+                ENCONTRADO = true;
+            } else {
+                v.visto = true;
+                agregarVecinosQ(cola, v);
+            }
+            ruta.add(v.nombre);
+            //despliegaStack(pila);
+        } while (cola.isEmpty() == false && ENCONTRADO == false);
+        System.out.println("BREADTH FIRST SEARCH");
+        if (ENCONTRADO == true) {
+            System.out.println("Existe un camino entre " + inicio + " y " + destino);
+            for (String vertice:ruta) {
+                System.out.print("("+vertice + ") " );
+                System.out.println();
+            }
+        } else {
+            System.out.println("NO HAY un camino entre " + inicio + " y " + destino);
+        }
+        return ruta;
+
+    }
+
+    public void llenarMapa(Queue<String> ruta, char[][] matriz) {
+       /* Enumeration<String> vertices_enum = this.vertices.keys();
+        while (vertices_enum.hasMoreElements()) {
+            String key = vertices_enum.nextElement();
+            Vertice v = this.vertices.get(key);
+            if (ruta.contains(v.nombre)) {
+                String[] elementos = v.nombre.split(",");
+                int
+            }
+        }
+
+        */
+
+        for (String nombre: ruta) {
+            String[] arreglo_aux = nombre.split(",");
+            int i = Integer.parseInt(arreglo_aux[0]);
+            int j = Integer.parseInt(arreglo_aux[1]);
+            matriz[i][j] = '#';
+        }
+    }
+
+
 
 }
 
@@ -65,12 +181,22 @@ public class Laberinto {
             Queue<String> cola = EncontrarEntradaSalida(mapa);
             Queue<String> ruta = new LinkedList<>();
             Grafo laberinto = creaGrafo(mapa);
-            for (int i = 0; i < mapa.length; i++) {
-                for (int j = 0; j < mapa.length; j++) {
-                    System.out.print(mapa[i][j]);
-                }
-                System.out.println();
+            String entrada = cola.remove();
+            String salida = cola.remove();
+            System.out.println("-------Mapa sin resolver-------Apartirdeaquisepasaria");
+            mostrarMapa(mapa);
+            System.out.println("Introduzca 1 para resolver con DFS, cualquier otra cosa para resolver con BFS");
+            Scanner scanner = new Scanner(System.in);
+            String metodo = scanner.nextLine();
+            if (metodo.equalsIgnoreCase("1")) {
+                ruta = laberinto.DepthFirstSearch(entrada,salida);
+            } else {
+                ruta = laberinto.BreadthFirstSearch(entrada,salida);
             }
+            laberinto.llenarMapa(ruta, mapa);
+            System.out.println("-------Mapa resuelto-------");
+            mostrarMapa(mapa);
+
         } else {
             System.out.println("Ingrese una cantidad de argumentos permitidos, actualmente hay: " + args.length);
             JOptionPane.showMessageDialog(null, "Ingrese una cantidad de argumentos permitidos: " +
