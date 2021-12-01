@@ -55,6 +55,8 @@ class Grafo {
 
 public class Laberinto {
 //probando un push jajaja
+    public static int ancho;
+    public static int largo;
 
     public static void main(String[] args) {
 
@@ -109,8 +111,8 @@ public class Laberinto {
 
     public static Grafo creaGrafo(char[][] matriz) {
         Grafo grafo = new Grafo();
-        int ancho = matriz.length;
-        int largo = matriz[0].length;
+        ancho = matriz.length;
+        largo = matriz[0].length;
         for (int i = 0; i < ancho; i++) {
             for (int j = 0; j < largo; j++) {
                 if (matriz[i][j] == ' ') {
