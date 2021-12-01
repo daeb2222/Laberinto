@@ -56,7 +56,7 @@ class Grafo {
 }
 
 public class Laberinto {
-
+//probando un push jajaja
 
     public static void main(String[] args) {
 
