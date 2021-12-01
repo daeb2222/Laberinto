@@ -11,9 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.LinkedList;
+import java.util.*;
 
 class Vertice {
     String nombre;
@@ -62,6 +60,8 @@ public class Laberinto {
 
         if (args.length == 1) {
             char[][] mapa = cargaLaberinto(args[0]);
+            Queue<String> cola = EncontrarEntradaSalida(mapa);
+            Queue<String> ruta = new LinkedList<>();
             Grafo laberinto = creaGrafo(mapa);
             for (int i = 0; i < mapa.length; i++) {
                 for (int j = 0; j < mapa.length; j++) {
@@ -147,16 +147,48 @@ public class Laberinto {
         }
         return grafo;
     }
-    public static String obtenerEntrada(char[][] matriz){
+
+    public static Queue<String> EncontrarEntradaSalida(char[][] matriz){
+        Queue<String> auxCola = new LinkedList<>();
+        ancho = matriz.length;
+        largo = matriz[0].length;
         String entrada = "";
 
-        return entrada;
+        if(matriz.length != 0){
+            for (int j = 0; j < largo; j++) {
+                if(matriz[0][j] == ' '){
+                    entrada = (0 + "," + j);
+                    auxCola.add(entrada);
+                }
+
+                if(matriz[ancho-1][j] == ' '){
+                    entrada = ((ancho-1) + "," + j);
+                    auxCola.add(entrada);
+                }
+            }
+
+            for (int i = 0; i < ancho; i++) {
+                if(matriz[i][0] == ' '){
+                    entrada = (i + "," + 0);
+                    auxCola.add(entrada);
+                }
+                if(matriz[i][largo-1] == ' '){
+                    entrada = (i + "," + (largo-1));
+                    auxCola.add(entrada);
+                }
+            }
+        }
+        return auxCola;
     }
-    public static String obtenerSalida(char[][] matriz){
-        String salida = "";
-        
-        return salida;
+    public static void mostrarMapa(char[][] mapa){
+        for (int i = 0; i < mapa.length; i++) {
+            for (int j = 0; j < mapa.length; j++) {
+                System.out.print(mapa[i][j]);
+            }
+            System.out.println();
+        }
     }
+
 
 }
 
