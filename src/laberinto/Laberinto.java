@@ -145,18 +145,6 @@ class Grafo {
     }
 
     public void llenarMapa(Queue<String> ruta, char[][] matriz) {
-       /* Enumeration<String> vertices_enum = this.vertices.keys();
-        while (vertices_enum.hasMoreElements()) {
-            String key = vertices_enum.nextElement();
-            Vertice v = this.vertices.get(key);
-            if (ruta.contains(v.nombre)) {
-                String[] elementos = v.nombre.split(",");
-                int
-            }
-        }
-
-        */
-
         for (String nombre: ruta) {
             String[] arreglo_aux = nombre.split(",");
             int i = Integer.parseInt(arreglo_aux[0]);
@@ -203,7 +191,6 @@ public class Laberinto {
                     "\n Actualmente hay: " + args.length + "\n Argumentos permitidos: " + 1, "Advertencia", 2);
         }
     }
-
     public static char[][] cargaLaberinto(String archivo) {
         int i = 0;
         ArrayList<String> lineas = new ArrayList<>();
@@ -278,39 +265,45 @@ public class Laberinto {
 
     public static Queue<String> EncontrarEntradaSalida(char[][] matriz){
         Queue<String> auxCola = new LinkedList<>();
+        boolean entradaEncontrada = false;
+        boolean salidaEncontrada = false;
         ancho = matriz.length;
         largo = matriz[0].length;
         String entrada = "";
 
         if(matriz.length != 0){
             for (int j = 0; j < largo; j++) {
-                if(matriz[0][j] == ' '){
+                if(matriz[0][j] == ' ' && !entradaEncontrada){
                     entrada = (0 + "," + j);
                     auxCola.add(entrada);
+                    entradaEncontrada = true;
                 }
 
-                if(matriz[ancho-1][j] == ' '){
+                if(matriz[ancho-1][j] == ' ' && !salidaEncontrada){
                     entrada = ((ancho-1) + "," + j);
                     auxCola.add(entrada);
+                    salidaEncontrada = true;
                 }
             }
 
             for (int i = 0; i < ancho; i++) {
-                if(matriz[i][0] == ' '){
+                if(matriz[i][0] == ' ' && !entradaEncontrada){
                     entrada = (i + "," + 0);
                     auxCola.add(entrada);
+                    entradaEncontrada = true;
                 }
-                if(matriz[i][largo-1] == ' '){
+                if(matriz[i][largo-1] == ' ' && !salidaEncontrada){
                     entrada = (i + "," + (largo-1));
                     auxCola.add(entrada);
+                    salidaEncontrada = true;
                 }
             }
         }
         return auxCola;
     }
     public static void mostrarMapa(char[][] mapa){
-        for (int i = 0; i < mapa.length; i++) {
-            for (int j = 0; j < mapa.length; j++) {
+        for (int i = 0; i < ancho; i++) {
+            for (int j = 0; j < largo; j++) {
                 System.out.print(mapa[i][j]);
             }
             System.out.println();
