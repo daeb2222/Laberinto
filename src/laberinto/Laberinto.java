@@ -167,11 +167,11 @@ public class Laberinto {
         if (args.length == 1) {
             char[][] mapa = cargaLaberinto(args[0]);
             Queue<String> cola = EncontrarEntradaSalida(mapa);
-            Queue<String> ruta = new LinkedList<>();
+            Queue<String> ruta;
             Grafo laberinto = creaGrafo(mapa);
             String entrada = cola.remove();
             String salida = cola.remove();
-            System.out.println("-------Mapa sin resolver-------Apartirdeaquisepasaria");
+            System.out.println("-------Mapa sin resolver-------");
             mostrarMapa(mapa);
             System.out.println("Introduzca 1 para resolver con DFS, cualquier otra cosa para resolver con BFS");
             Scanner scanner = new Scanner(System.in);
