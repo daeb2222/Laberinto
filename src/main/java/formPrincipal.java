@@ -56,7 +56,7 @@ public class formPrincipal extends javax.swing.JFrame {
         this.setResizable(false);
         this.setIconImage(null);
     }
-
+    //hola
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
